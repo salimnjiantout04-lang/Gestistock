@@ -20,8 +20,9 @@ Route::post('/login',          [AuthController::class, 'login']);
 Route::post('/forgot-password',   [AuthController::class, 'forgotPassword']);
 Route::post('/verify-reset-code', [AuthController::class, 'verifyResetCode']);
 Route::post('/reset-password',    [AuthController::class, 'resetPassword']);
-Route::get('/auth/google',      [AuthController::class, 'googleRedirect']);
-Route::get('/auth/google/callback', [AuthController::class, 'googleCallback']);
+Route::get('/auth/google',              [AuthController::class, 'googleRedirect']);
+Route::get('/auth/google/callback',     [AuthController::class, 'googleCallback']);
+Route::post('/auth/google/exchange',    [AuthController::class, 'googleExchange'])->middleware('throttle:10,1');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

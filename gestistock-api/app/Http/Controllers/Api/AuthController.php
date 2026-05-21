@@ -7,9 +7,12 @@ use App\Models\User;
 use App\Notifications\PasswordResetCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -18,16 +21,36 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'civility'   => 'required|in:M.,Mme',
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|string|email|unique:users',
+            'phone'      => 'nullable|string|max:20',
+            'password'   => [
+                'required',
+                'confirmed',
+                Password::min(8)->max(30)->letters()->mixedCase()->numbers(),
+            ],
+            'accept_terms' => 'required|accepted',
+            'newsletter'   => 'boolean',
+        ], [
+            'email.unique'      => 'Un compte existe déjà avec cette adresse email.',
+            'accept_terms.accepted' => 'Vous devez accepter les conditions générales.',
+            'password'          => 'Le mot de passe doit contenir entre 8 et 30 caractères, avec au moins une majuscule, une minuscule et un chiffre.',
         ]);
 
+        $firstName = trim($request->first_name);
+        $lastName  = trim($request->last_name);
+
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'lecteur',
+            'civility'   => $request->civility,
+            'first_name' => $firstName,
+            'last_name'  => $lastName,
+            'name'       => trim("{$firstName} {$lastName}"),
+            'email'      => $request->email,
+            'phone'      => $request->phone,
+            'password'   => Hash::make($request->password),
+            'role'       => 'lecteur',
         ]);
 
         $token = $user->createToken('gestistock')->plainTextToken;
@@ -166,6 +189,16 @@ class AuthController extends Controller
         return response()->json(['message' => 'Mot de passe réinitialisé avec succès.']);
     }
 
+    private function splitFullName(?string $fullName): array
+    {
+        $parts = preg_split('/\s+/', trim($fullName ?? ''), 2);
+
+        return [
+            'first_name' => $parts[0] ?? 'Utilisateur',
+            'last_name'  => $parts[1] ?? '',
+        ];
+    }
+
     public function googleRedirect()
     {
         return response()->json([
@@ -175,34 +208,70 @@ class AuthController extends Controller
 
     public function googleCallback(Request $request)
     {
+        $frontendUrl = config('app.frontend_url');
+
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (\Exception $e) {
-            return redirect()->to(env('FRONTEND_URL', 'http://localhost:5173') . '/login?error=google_auth_failed');
+            Log::warning('Google OAuth callback failed', ['message' => $e->getMessage()]);
+
+            return redirect()->to($frontendUrl . '/auth/google-callback?error=google_auth_failed');
         }
 
-        $user = User::where('email', $googleUser->getEmail())->first();
+        $user = User::where('google_id', $googleUser->getId())->first()
+            ?? User::where('email', $googleUser->getEmail())->first();
+
+        $nameParts = $this->splitFullName($googleUser->getName());
 
         if (!$user) {
             $user = User::create([
-                'name'              => $googleUser->getName(),
+                'civility'          => 'M.',
+                'first_name'        => $nameParts['first_name'],
+                'last_name'         => $nameParts['last_name'],
+                'name'              => trim($googleUser->getName()),
                 'email'             => $googleUser->getEmail(),
                 'google_id'         => $googleUser->getId(),
                 'avatar'            => $googleUser->getAvatar(),
                 'password'          => Hash::make(Str::random(24)),
                 'role'              => 'lecteur',
+                'email_verified_at' => now(),
             ]);
         } else {
-            $user->update([
-                'google_id' => $googleUser->getId(),
-                'avatar'    => $googleUser->getAvatar(),
+            $user->forceFill([
+                'google_id'         => $googleUser->getId(),
+                'avatar'            => $googleUser->getAvatar(),
+                'email_verified_at' => $user->email_verified_at ?? now(),
+                'first_name'        => $user->first_name ?? $nameParts['first_name'],
+                'last_name'         => $user->last_name ?? $nameParts['last_name'],
+            ])->save();
+        }
+
+        $code = Str::random(64);
+        Cache::put('google_oauth:' . $code, $user->id, now()->addMinutes(2));
+
+        return redirect()->to($frontendUrl . '/auth/google-callback?code=' . $code);
+    }
+
+    public function googleExchange(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|size:64',
+        ]);
+
+        $userId = Cache::pull('google_oauth:' . $request->code);
+
+        if (!$userId) {
+            throw ValidationException::withMessages([
+                'code' => ['Code invalide ou expiré. Veuillez réessayer.'],
             ]);
         }
 
+        $user = User::findOrFail($userId);
         $token = $user->createToken('gestistock-google')->plainTextToken;
 
-        return redirect()->to(
-            env('FRONTEND_URL', 'http://localhost:5173') . '/auth/google-callback?token=' . $token
-        );
+        return response()->json([
+            'user'  => $user,
+            'token' => $token,
+        ]);
     }
 }

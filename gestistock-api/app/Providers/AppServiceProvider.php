@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $caBundle = storage_path('cacert.pem');
+
+        if (file_exists($caBundle)) {
+            Http::globalOptions(['verify' => $caBundle]);
+        }
     }
 }
