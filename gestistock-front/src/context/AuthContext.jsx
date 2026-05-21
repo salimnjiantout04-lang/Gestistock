@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../api/axios'
 
 const AuthContext = createContext(null)
@@ -18,17 +18,16 @@ export function AuthProvider({ children }) {
       setLoading(false)
     }
 
-    const handleGoogleLogin = (e) => {
-      setUser(e.detail.user)
-    }
-    window.addEventListener('google-login', handleGoogleLogin)
-    return () => window.removeEventListener('google-login', handleGoogleLogin)
+  }, [])
+
+  const setSession = useCallback((userData, token) => {
+    localStorage.setItem('token', token)
+    setUser(userData)
   }, [])
 
   const login = async (email, password) => {
     const res = await api.post('/login', { email, password })
-    localStorage.setItem('token', res.data.token)
-    setUser(res.data.user)
+    setSession(res.data.user, res.data.token)
     return res.data
   }
 
@@ -39,7 +38,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, setSession }}>
       {children}
     </AuthContext.Provider>
   )

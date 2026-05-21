@@ -1,38 +1,50 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import api from '../../api/axios'
+import { useAuth } from '../../context/AuthContext'
+import { authService } from '../../api/authService'
 import { Package, AlertCircle } from 'lucide-react'
+
+const ERROR_MESSAGES = {
+  google_auth_failed: 'La connexion Google a échoué. Veuillez réessayer.',
+  access_denied: 'Vous avez annulé la connexion Google.',
+}
 
 export default function GoogleCallback() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const { setSession } = useAuth()
   const [error, setError] = useState('')
+  const exchanged = useRef(false)
 
   useEffect(() => {
-    const token = searchParams.get('token')
+    if (exchanged.current) return
+
     const errorParam = searchParams.get('error')
+    const code = searchParams.get('code')
 
     if (errorParam) {
-      setError('Authentification Google échouée.')
+      setError(ERROR_MESSAGES[errorParam] || ERROR_MESSAGES.google_auth_failed)
       return
     }
 
-    if (token) {
-      localStorage.setItem('token', token)
-      api.get('/me')
-        .then(res => {
-          const loginEvent = new CustomEvent('google-login', { detail: { user: res.data, token } })
-          window.dispatchEvent(loginEvent)
-          navigate('/dashboard', { replace: true })
-        })
-        .catch(() => {
-          localStorage.removeItem('token')
-          setError('Erreur de récupération du profil.')
-        })
-    } else {
-      setError('Token manquant.')
+    if (!code) {
+      setError('Lien de connexion invalide.')
+      return
     }
-  }, [])
+
+    exchanged.current = true
+
+    authService.exchangeGoogleCode(code)
+      .then((res) => {
+        setSession(res.data.user, res.data.token)
+        navigate('/dashboard', { replace: true })
+      })
+      .catch((err) => {
+        const message = err.response?.data?.errors?.code?.[0]
+          || 'Impossible de finaliser la connexion Google.'
+        setError(message)
+      })
+  }, [searchParams, navigate, setSession])
 
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
@@ -43,7 +55,7 @@ export default function GoogleCallback() {
               <AlertCircle size={32} className="text-red-600" />
             </div>
             <p className="text-red-600 font-medium mb-2">{error}</p>
-            <button onClick={() => navigate('/login')} className="text-blue-600 hover:underline text-sm">
+            <button type="button" onClick={() => navigate('/login')} className="text-blue-600 hover:underline text-sm">
               Retour à la connexion
             </button>
           </>

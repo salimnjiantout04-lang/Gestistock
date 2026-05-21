@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import PrivateRoute from './routes/PrivateRoute'
+import ErrorBoundary from './components/ErrorBoundary'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import ForgotPassword from './pages/auth/ForgotPassword'
@@ -39,7 +40,7 @@ export default function App() {
           <Toaster position="top-right" />
           <Routes>
             <Route path="/login"              element={<Login />} />
-            <Route path="/register"           element={<Register />} />
+            <Route path="/register"           element={<ErrorBoundary><Register /></ErrorBoundary>} />
             <Route path="/forgot-password"    element={<ForgotPassword />} />
             <Route path="/reset-password"     element={<ResetPassword />} />
             <Route path="/auth/google-callback" element={<GoogleCallback />} />
