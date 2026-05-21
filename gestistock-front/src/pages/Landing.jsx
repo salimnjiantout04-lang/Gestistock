@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Package, BarChart3, Bell, TrendingUp, Users, Shield, ArrowRight, CheckCircle, Menu, X, Layers, Download, RefreshCw, Truck, Building2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const features = [
   { icon: Package, title: 'Gestion des produits', desc: 'Gérez votre catalogue produits avec catégories, fournisseurs, prix et images. Vue complète avec recherche et filtres.' },
@@ -27,45 +27,80 @@ const steps = [
   { num: '03', title: 'Gérez votre stock', desc: 'Enregistrez les mouvements, suivez les alertes et pilotez votre activité.' },
 ]
 
+function Reveal({ as: Component = 'div', children, className = '', delay = 0 }) {
+  const ref = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.unobserve(entry.target)
+        }
+      },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.18 },
+    )
+
+    observer.observe(node)
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <Component
+      ref={ref}
+      className={`reveal-motion ${isVisible ? 'is-visible' : ''} ${className}`}
+      style={{ '--reveal-delay': `${delay}ms` }}
+    >
+      {children}
+    </Component>
+  )
+}
+
 export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-white">
       {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-shadow duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="bg-blue-600 p-2 rounded-lg">
+            <Link to="/" className="group flex items-center gap-2.5">
+              <div className="bg-blue-600 p-2 rounded-lg transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
                 <Package size={20} className="text-white" />
               </div>
               <span className="text-lg font-bold text-gray-900">GestiStock</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Solutions</a>
-              <a href="#how-it-works" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Comment ça marche</a>
-              <a href="#pricing" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
+              <a href="#features" className="nav-link-animated text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Solutions</a>
+              <a href="#how-it-works" className="nav-link-animated text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Comment ça marche</a>
+              <a href="#pricing" className="nav-link-animated text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
             </div>
 
             <div className="hidden md:flex items-center gap-3">
               <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-blue-600 px-4 py-2 transition-colors">
                 Se connecter
               </Link>
-              <Link to="/register" className="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full transition-all  ">
+              <Link to="/register" className="group inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gray-200">
                 Essai gratuit
+                <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </Link>
             </div>
 
-            <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2">
+            <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 transition-transform active:scale-95">
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
 
         {menuOpen && (
-          <div className="md:hidden bg-white border-b border-gray-100 px-4 py-4 space-y-3">
+          <div className="landing-mobile-menu md:hidden bg-white border-b border-gray-100 px-4 py-4 space-y-3">
             <a href="#features" onClick={() => setMenuOpen(false)} className="block text-sm text-gray-600 py-2 font-medium">Fonctionnalités</a>
             <a href="#how-it-works" onClick={() => setMenuOpen(false)} className="block text-sm text-gray-600 py-2 font-medium">Comment ça marche</a>
             <a href="#pricing" onClick={() => setMenuOpen(false)} className="block text-sm text-gray-600 py-2 font-medium">Tarifs</a>
@@ -79,36 +114,37 @@ export default function Landing() {
 
       {/* HERO */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.08),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(99,102,241,0.05),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(15,23,42,0.035),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(148,163,184,0.04),transparent_50%)]" />
+        <div className="landing-grid absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 mb-6">
+          <Reveal className="max-w-3xl mx-auto text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 mb-6 shadow-sm shadow-gray-200/70">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
               <span className="text-xs font-medium text-blue-700">Nouvelle version disponible</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight leading-[1.08] mb-6">
               Gérez votre stock
-              <span className="block text-blue-600">simplement et efficacement</span>
+              <span className="landing-gradient-text block text-blue-600">simplement et efficacement</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-8 leading-relaxed">
               GestiStock est l'outil de gestion de stock moderne dont votre entreprise a besoin. 
               Suivi des mouvements, alertes intelligentes, rapports détaillés — le tout dans une interface élégante.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/register" className="w-full sm:w-auto text-center text-white bg-blue-600 hover:bg-blue-700 px-8 py-3.5 rounded-full text-sm font-semibold transition-all  shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5">
+              <Link to="/register" className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 text-center text-white bg-blue-600 hover:bg-blue-700 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-lg shadow-gray-300/70 hover:shadow-gray-300 hover:-translate-y-0.5">
                 Commencer gratuitement
+                <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
-              <a href="#features" className="w-full sm:w-auto text-center text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 px-8 py-3.5 rounded-full text-sm font-semibold transition-all">
+              <a href="#features" className="w-full sm:w-auto text-center text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5">
                 En savoir plus
               </a>
             </div>
             <p className="text-xs text-gray-400 mt-4">Aucune carte bancaire requise · Essai gratuit</p>
-          </div>
+          </Reveal>
 
-          <div className="relative max-w-5xl mx-auto">
-            <div className="absolute -inset-4  rounded-3xl blur-xl" />
-            <div className="relative bg-white rounded-2xl border border-gray-200 shadow-2xl overflow-hidden">
+          <Reveal className="relative max-w-5xl mx-auto" delay={180}>
+            <div className="absolute -inset-2 rounded-3xl bg-slate-100/35 blur-lg" />
+            <div className="dashboard-preview relative bg-white rounded-2xl border border-gray-200 shadow-lg shadow-gray-200/60 overflow-hidden transition-transform duration-700 hover:scale-[1.015]">
               <div className="flex items-center gap-2 px-5 py-3 bg-gray-50 border-b border-gray-100">
                 <span className="w-3 h-3 rounded-full bg-red-400" />
                 <span className="w-3 h-3 rounded-full bg-yellow-400" />
@@ -120,8 +156,27 @@ export default function Landing() {
                 alt="Aperçu du tableau de bord GestiStock"
                 className="w-full h-auto"
               />
+              <div className="landing-shine absolute inset-0 pointer-events-none" />
             </div>
-          </div>
+            <div className="landing-float-card hidden md:flex absolute -left-6 top-20 items-center gap-3 rounded-2xl border border-gray-100 bg-white/90 px-4 py-3 shadow-xl shadow-gray-200/60 backdrop-blur">
+              <div className="rounded-xl bg-gray-50 p-2">
+                <Layers size={18} className="text-blue-600" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-gray-900">12 dépôts</p>
+                <p className="text-[11px] text-gray-500">synchronisés</p>
+              </div>
+            </div>
+            <div className="landing-float-card landing-float-card-delayed hidden md:flex absolute -right-6 bottom-12 items-center gap-3 rounded-2xl border border-green-100 bg-white/90 px-4 py-3 shadow-xl shadow-green-100/60 backdrop-blur">
+              <div className="rounded-xl bg-green-50 p-2">
+                <RefreshCw size={18} className="text-green-600 animate-spin [animation-duration:3s]" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-gray-900">+128 entrées</p>
+                <p className="text-[11px] text-gray-500">cette semaine</p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -130,10 +185,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((s, i) => (
-              <div key={i} className="text-center text-white">
+              <Reveal key={i} className="text-center text-white" delay={i * 90}>
                 <p className="text-4xl md:text-5xl font-bold mb-1">{s.value}</p>
                 <p className="text-sm text-blue-200">{s.label}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -142,25 +197,25 @@ export default function Landing() {
       {/* FEATURES */}
       <section id="features" className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="inline-block text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full mb-4">Fonctionnalités</span>
+          <Reveal className="max-w-2xl mx-auto text-center mb-16">
+            <span className="inline-block text-xs font-semibold text-blue-600 bg-white border border-gray-200 px-3 py-1.5 rounded-full mb-4">Fonctionnalités</span>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-4">
               Tout ce dont vous avez besoin pour gérer votre stock
             </h2>
             <p className="text-gray-500">Une solution complète et intuitive pour les PME, les commerces et les entrepôts.</p>
-          </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feat, i) => {
               const Icon = feat.icon
               return (
-                <div key={i} className="group p-6 rounded-2xl border border-gray-100 hover:border-blue-100 hover:shadow-lg hover:shadow-blue-50/50 transition-all duration-300 hover:-translate-y-1">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Reveal key={i} className="group p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-200/70 transition-all duration-300 hover:-translate-y-1" delay={(i % 3) * 110}>
+                  <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                     <Icon size={22} className="text-blue-600" />
                   </div>
                   <h3 className="text-base font-semibold text-gray-900 mb-2">{feat.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{feat.desc}</p>
-                </div>
+                </Reveal>
               )
             })}
           </div>
@@ -170,24 +225,24 @@ export default function Landing() {
       {/* HOW IT WORKS */}
       <section id="how-it-works" className="py-20 md:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="inline-block text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full mb-4">Comment ça marche</span>
+          <Reveal className="max-w-2xl mx-auto text-center mb-16">
+            <span className="inline-block text-xs font-semibold text-blue-600 bg-white border border-gray-200 px-3 py-1.5 rounded-full mb-4">Comment ça marche</span>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-4">
               Prêt en 3 étapes
             </h2>
             <p className="text-gray-500">Configurez votre espace en quelques minutes et commencez à gérer votre stock.</p>
-          </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((step, i) => (
-              <div key={i} className="relative text-center">
-                {i < 2 && <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px border-t-2 border-dashed border-gray-200" />}
-                <div className="w-24 h-24 rounded-2xl bg-blue-700 flex items-center justify-center mx-auto mb-6 shadow-lg ">
+              <Reveal key={i} className="relative text-center" delay={i * 140}>
+                {i < 2 && <div className="step-line hidden md:block absolute top-12 left-[60%] w-[80%] h-px border-t-2 border-dashed border-gray-200" />}
+                <div className="w-24 h-24 rounded-2xl bg-blue-700 flex items-center justify-center mx-auto mb-6 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:rotate-2">
                   <span className="text-2xl font-bold text-white">{step.num}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
                 <p className="text-sm text-gray-500 max-w-xs mx-auto">{step.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -196,16 +251,16 @@ export default function Landing() {
       {/* PRICING */}
       <section id="pricing" className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="inline-block text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full mb-4">Tarifs</span>
+          <Reveal className="max-w-2xl mx-auto text-center mb-16">
+            <span className="inline-block text-xs font-semibold text-blue-600 bg-white border border-gray-200 px-3 py-1.5 rounded-full mb-4">Tarifs</span>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-4">
               Simple et transparent
             </h2>
             <p className="text-gray-500">Pas de frais cachés, pas de surprise. Commencez gratuitement.</p>
-          </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <div className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg transition-shadow">
+            <Reveal className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Starter</h3>
               <p className="text-sm text-gray-500 mb-6">Pour les petites structures</p>
               <p className="text-3xl font-bold text-gray-900 mb-1">Gratuit</p>
@@ -218,13 +273,13 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <Link to="/register" className="block w-full text-center text-sm font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-6 py-3 rounded-full transition-colors">
+              <Link to="/register" className="block w-full text-center text-sm font-semibold text-blue-600 bg-white hover:bg-gray-50 border border-gray-200 px-6 py-3 rounded-full transition-colors">
                 Commencer
               </Link>
-            </div>
+            </Reveal>
 
-            <div className="rounded-2xl border-2 border-blue-500 p-8 bg-white shadow-xl shadow-blue-100 relative scale-105">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-semibold px-4 py-1 rounded-full">Populaire</span>
+            <Reveal className="rounded-2xl border-2 border-blue-500 p-8 bg-white shadow-xl shadow-gray-200/80 relative scale-105 hover:-translate-y-1 transition-transform duration-300" delay={120}>
+              <span className="landing-popular-badge absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-semibold px-4 py-1 rounded-full">Populaire</span>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Pro</h3>
               <p className="text-sm text-gray-500 mb-6">Pour les entreprises en croissance</p>
               <p className="text-3xl font-bold text-gray-900 mb-1">14 900 <span className="text-base font-medium text-gray-400">FCFA/mois</span></p>
@@ -237,12 +292,12 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <Link to="/register" className="block w-full text-center text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-all shadow-lg shadow-blue-200">
+              <Link to="/register" className="block w-full text-center text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-all shadow-lg shadow-gray-300/70">
                 Essai gratuit
               </Link>
-            </div>
+            </Reveal>
 
-            <div className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg transition-shadow">
+            <Reveal className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300" delay={240}>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Enterprise</h3>
               <p className="text-sm text-gray-500 mb-6">Pour les grandes structures</p>
               <p className="text-3xl font-bold text-gray-900 mb-1">Sur mesure</p>
@@ -258,14 +313,14 @@ export default function Landing() {
               <a href="mailto:njiantout004@gmail.com" className="block w-full text-center text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 px-6 py-3 rounded-full transition-colors">
                 Nous contacter
               </a>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-20 md:py-28 bg-gray-900">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Reveal className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-4">
             Prêt à transformer votre gestion de stock ?
           </h2>
@@ -274,14 +329,14 @@ export default function Landing() {
             Commencez gratuitement, aucune carte bancaire requise.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to="/register" className="w-full sm:w-auto text-center text-gray-900 bg-white hover:bg-gray-100 px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-xl">
+            <Link to="/register" className="w-full sm:w-auto text-center text-gray-900 bg-white hover:bg-gray-100 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5">
               Commencer gratuitement
             </Link>
-            <a href="mailto:njiantout004@gmail.com" className="w-full sm:w-auto text-center text-white border border-gray-600 hover:border-gray-500 px-8 py-3.5 rounded-full text-sm font-semibold transition-all">
+            <a href="mailto:njiantout004@gmail.com" className="w-full sm:w-auto text-center text-white border border-gray-600 hover:border-gray-500 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5">
               Contacter l'équipe
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* FOOTER */}
