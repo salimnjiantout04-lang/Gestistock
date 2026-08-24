@@ -52,8 +52,8 @@ class DashboardController extends Controller
 
         $mouvements30j  = StockMovement::where('created_at', '>=', now()->subDays(30))
                             ->selectRaw('DATE(created_at) as date, type, SUM(quantity) as total')
-                            ->groupBy('date', 'type')
-                            ->orderBy('date')
+                            ->groupBy(DB::raw('DATE(created_at)'), 'type')
+                            ->orderBy(DB::raw('DATE(created_at)'))
                             ->get();
 
         // Top produits les plus vendus (via commandes livrées)
@@ -80,11 +80,15 @@ class DashboardController extends Controller
                                 ->get();
 
         // Ventes mensuelles (12 derniers mois)
+        $moisExpr = DB::getDriverName() === 'pgsql'
+            ? "TO_CHAR(created_at, 'YYYY-MM')"
+            : "DATE_FORMAT(created_at, '%Y-%m')";
+
         $ventesMensuelles = Order::where('status', 'livre')
             ->where('created_at', '>=', now()->subMonths(12))
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as mois, COUNT(*) as nb_commandes, SUM(total) as total_ventes")
-            ->groupBy('mois')
-            ->orderBy('mois')
+            ->selectRaw("$moisExpr as mois, COUNT(*) as nb_commandes, SUM(total) as total_ventes")
+            ->groupBy(DB::raw($moisExpr))
+            ->orderBy(DB::raw($moisExpr))
             ->get();
 
         // Total commandes par statut
