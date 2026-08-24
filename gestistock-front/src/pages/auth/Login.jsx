@@ -118,7 +118,7 @@ export default function Login() {
                 <div className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-white px-3 text-gray-500">ou avec votre email</span>
+                <span className="bg-white px-3 text-gray-500">ou </span>
               </div>
             </div>
 
