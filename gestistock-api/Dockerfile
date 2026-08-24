@@ -17,4 +17,4 @@ RUN php artisan package:discover || true
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "php artisan config:cache; php artisan storage:link || true; php artisan migrate --force; exec php artisan serve --host=0.0.0.0 --port=${PORT}"]
+CMD ["sh", "-c", "php artisan config:cache; php artisan storage:link || true; php artisan migrate --force; php artisan db:seed --force; exec php artisan serve --host=0.0.0.0 --port=${PORT} --no-reload"]
