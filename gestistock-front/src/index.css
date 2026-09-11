@@ -59,15 +59,6 @@ html {
   animation: landing-grid-pan 22s linear infinite;
 }
 
-.landing-gradient-text {
-  color: transparent;
-  background: linear-gradient(90deg, #2563eb, #0891b2, #2563eb);
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: landing-gradient-flow 5s ease-in-out infinite;
-}
-
 .dashboard-preview {
   animation: landing-float 7s ease-in-out infinite;
 }
@@ -118,39 +109,6 @@ html {
 
   to {
     background-position: 40px 40px;
-  }
-}
-
-@keyframes landing-gradient-flow {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes landing-float {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  50% {
-    translate: 0 -10px;
-  }
-}
-
-@keyframes landing-card-float {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  50% {
-    translate: 0 -8px;
   }
 }
 
@@ -214,7 +172,6 @@ html {
   }
 
   .landing-grid,
-  .landing-gradient-text,
   .dashboard-preview,
   .landing-shine,
   .landing-float-card,

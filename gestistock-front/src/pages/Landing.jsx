@@ -123,7 +123,7 @@ export default function Landing() {
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight leading-[1.08] mb-6">
               Gérez votre stock
-              <span className="landing-gradient-text block text-blue-600">simplement et efficacement</span>
+              <span className="block text-blue-600">simplement et efficacement</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-8 leading-relaxed">
               GestiStock est l'outil de gestion de stock moderne dont votre entreprise a besoin. 
