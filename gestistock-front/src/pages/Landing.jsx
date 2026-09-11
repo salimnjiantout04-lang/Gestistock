@@ -152,7 +152,7 @@ export default function Landing() {
                 <span className="ml-3 text-xs text-gray-400 font-mono">app.gestistock.com/dashboard</span>
               </div>
               <img
-                src="/src/assets/dashboard-screenshot.png"
+                src="/screenshots/dashboard.png"
                 alt="Aperçu du tableau de bord GestiStock"
                 className="w-full h-auto"
               />
