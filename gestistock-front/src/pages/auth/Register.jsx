@@ -123,7 +123,7 @@ export default function Register() {
   }
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4" style={{ backgroundImage: "url('https://odoocdn.com/openerp_website/static/src/img/2016/components/arch_1.jpg')" }}>
+    <div className="relative min-h-screen bg-white flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top_right,rgba(15,23,42,0.035),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(148,163,184,0.04),transparent_50%)]">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-lg overflow-hidden">
         <div className="bg-[#2d3e50] px-6 py-4 flex items-center gap-3">
           <div className="bg-white/10 p-2 rounded-lg">
