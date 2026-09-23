@@ -50,7 +50,7 @@ class AuthController extends Controller
             'email'      => $request->email,
             'phone'      => $request->phone,
             'password'   => Hash::make($request->password),
-            'role'       => 'lecteur',
+            'role'       => 'gestionnaire',
         ]);
 
         $token = $user->createToken('gestistock')->plainTextToken;
@@ -233,7 +233,7 @@ class AuthController extends Controller
                 'google_id'         => $googleUser->getId(),
                 'avatar'            => $googleUser->getAvatar(),
                 'password'          => Hash::make(Str::random(24)),
-                'role'              => 'lecteur',
+                'role'              => 'gestionnaire',
                 'email_verified_at' => now(),
             ]);
         } else {
