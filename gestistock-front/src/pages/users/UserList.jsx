@@ -83,7 +83,12 @@ export default function UserList() {
       toast.success('Utilisateur supprimé')
       fetchUsers()
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Erreur')
+      if (err.response?.status === 404) {
+        toast.error('Cet utilisateur a déjà été supprimé.')
+        fetchUsers()
+      } else {
+        toast.error(err.response?.data?.message || 'Erreur')
+      }
     }
   }
 

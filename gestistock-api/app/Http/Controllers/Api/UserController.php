@@ -38,8 +38,16 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Cet utilisateur n\'existe plus. La liste a été actualisée, rafraîchissez la page.',
+            ], 404);
+        }
+
         $request->validate([
             'name'  => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email,' . $user->id,
@@ -57,8 +65,16 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, $id)
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Cet utilisateur n\'existe plus. La liste a été actualisée, rafraîchissez la page.',
+            ], 404);
+        }
+
         if ($user->id === auth()->id()) {
             return response()->json(['message' => 'Vous ne pouvez pas vous supprimer vous-même'], 403);
         }
