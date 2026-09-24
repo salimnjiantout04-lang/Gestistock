@@ -51,6 +51,7 @@ class AuthController extends Controller
             'phone'      => $request->phone,
             'password'   => Hash::make($request->password),
             'role'       => 'gestionnaire',
+            'trial_ends_at' => now()->addDays(7),
         ]);
 
         $token = $user->createToken('gestistock')->plainTextToken;
@@ -74,7 +75,14 @@ class AuthController extends Controller
             ]);
         }
 
-        $user  = Auth::user();
+        $user = Auth::user();
+
+        if ($user->trial_expired) {
+            throw ValidationException::withMessages([
+                'email' => ['Votre essai gratuit de 7 jours est terminé.'],
+            ]);
+        }
+
         $token = $user->createToken('gestistock')->plainTextToken;
 
         return response()->json([
@@ -234,6 +242,7 @@ class AuthController extends Controller
                 'avatar'            => $googleUser->getAvatar(),
                 'password'          => Hash::make(Str::random(24)),
                 'role'              => 'gestionnaire',
+                'trial_ends_at'     => now()->addDays(7),
                 'email_verified_at' => now(),
             ]);
         } else {

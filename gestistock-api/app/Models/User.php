@@ -23,6 +23,7 @@ class User extends Authenticatable
         'google_id',
         'avatar',
         'email_verified_at',
+        'trial_ends_at',
     ];
 
     protected $hidden = [
@@ -30,12 +31,32 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'trial_days_left',
+        'trial_expired',
+    ];
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
+            'trial_ends_at'     => 'datetime',
         ];
+    }
+
+    public function getTrialDaysLeftAttribute(): int
+    {
+        if (!$this->trial_ends_at) {
+            return 0;
+        }
+
+        return max(0, (int) now()->diffInDays($this->trial_ends_at, false));
+    }
+
+    public function getTrialExpiredAttribute(): bool
+    {
+        return $this->trial_ends_at !== null && $this->trial_ends_at->isPast();
     }
 
     public function isAdmin(): bool
