@@ -309,8 +309,8 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <a href="mailto:njiantout004@gmail.com" className="block w-full text-center text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 px-6 py-3 rounded-full transition-colors">
-                Nous contacter
+              <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 px-6 py-3 rounded-full transition-colors">
+                Nous contacter sur WhatsApp
               </a>
             </Reveal>
           </div>
@@ -331,7 +331,7 @@ export default function Landing() {
             <Link to="/register" className="w-full sm:w-auto text-center text-gray-900 bg-white hover:bg-gray-100 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5">
               Commencer gratuitement
             </Link>
-            <a href="mailto:njiantout004@gmail.com" className="w-full sm:w-auto text-center text-white border border-gray-600 hover:border-gray-500 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5">
+            <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto text-center text-white border border-gray-600 hover:border-gray-500 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5">
               Contacter l'équipe
             </a>
           </div>
@@ -349,33 +349,29 @@ export default function Landing() {
                 </div>
                 <span className="text-base font-bold text-gray-900">GestiStock</span>
               </Link>
-              <p className="text-sm text-gray-500 leading-relaxed mb-4">
+               <p className="text-sm text-gray-500 leading-relaxed mb-4">
                 Solution de gestion de stock moderne pour les entreprises africaines.
               </p>
               <p className="text-xs text-gray-400">Douala, Cameroun</p>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-4">Produit</h4>
+              <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-4">Contact</h4>
               <ul className="space-y-2.5">
-                {['Fonctionnalités', 'Tarifs', 'FAQ', 'Mises à jour'].map((item, i) => (
-                  <li key={i}><a href="#" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">{item}</a></li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-4">Entreprise</h4>
-              <ul className="space-y-2.5">
-                {['À propos', 'Blog', 'Contact', 'Partenaires'].map((item, i) => (
-                  <li key={i}><a href="#" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">{item}</a></li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-4">Légal</h4>
-              <ul className="space-y-2.5">
-                {['Confidentialité', 'Conditions', 'CGV', 'Mentions légales'].map((item, i) => (
-                  <li key={i}><a href="#" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">{item}</a></li>
-                ))}
+                <li>
+                  <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors">
+                    WhatsApp : +237 678 330 877
+                  </a>
+                </li>
+                <li>
+                  <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors">
+                    WhatsApp : +237 678 330 877
+                  </a>
+                </li>
+                <li>
+                  <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors">
+                    Service client
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
