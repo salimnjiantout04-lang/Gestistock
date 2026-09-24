@@ -78,9 +78,10 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user->trial_expired) {
-            throw ValidationException::withMessages([
-                'email' => ['Votre essai gratuit de 7 jours est terminé.'],
-            ]);
+            return response()->json([
+                'message'       => 'Votre essai gratuit de 7 jours est terminé. Passez au plan payant pour continuer.',
+                'trial_expired' => true,
+            ], 402);
         }
 
         $token = $user->createToken('gestistock')->plainTextToken;

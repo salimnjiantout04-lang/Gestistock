@@ -9,6 +9,7 @@ import Register from './pages/auth/Register'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import GoogleCallback from './pages/auth/GoogleCallback'
+import Upgrade from './pages/auth/Upgrade'
 import Landing from './pages/Landing'
 import Dashboard from './pages/dashboard/Dashboard'
 import ProductList from './pages/products/ProductList'
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/forgot-password"    element={<ForgotPassword />} />
             <Route path="/reset-password"     element={<ResetPassword />} />
             <Route path="/auth/google-callback" element={<GoogleCallback />} />
+            <Route path="/upgrade" element={<Upgrade />} />
             <Route path="/" element={<Landing />} />
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/products" element={<PrivateRoute><ProductList /></PrivateRoute>} />

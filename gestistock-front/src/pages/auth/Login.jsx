@@ -28,6 +28,10 @@ export default function Login() {
       toast.success('Connexion réussie !')
       navigate('/dashboard')
     } catch (err) {
+      if (err.response?.data?.trial_expired) {
+        navigate('/upgrade')
+        return
+      }
       toast.error(err.response?.data?.errors?.email?.[0] || 'Identifiants incorrects')
     }
   }
