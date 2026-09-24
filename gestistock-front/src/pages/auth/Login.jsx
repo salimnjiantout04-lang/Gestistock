@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import toast from 'react-hot-toast'
-import { Package, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Package, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { authService } from '../../api/authService'
 import GoogleIcon from '../../components/auth/GoogleIcon'
 
@@ -98,8 +98,22 @@ export default function Login() {
               disabled={isSubmitting}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded text-sm font-semibold text-white disabled:opacity-50 bg-[#0070CD] hover:bg-[#005fa8]"
             >
-              {isSubmitting ? 'Connexion...' : 'Se connecter'}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin" size={16} />
+                  Connexion...
+                </>
+              ) : (
+                'Se connecter'
+              )}
             </button>
+
+            {isSubmitting && (
+              <p className="flex items-center justify-center gap-1.5 text-xs text-gray-500 pt-1">
+                <Loader2 className="animate-spin" size={12} />
+                Réveil du serveur en cours… première connexion, patientez quelques secondes
+              </p>
+            )}
 
             <div className="flex items-center justify-between text-xs pt-2">
               <p className="text-gray-600">

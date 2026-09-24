@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { Package, Mail, Lock, Eye, EyeOff, ChevronRight, ChevronLeft, User, Phone } from 'lucide-react'
+import { Package, Mail, Lock, Eye, EyeOff, ChevronRight, ChevronLeft, User, Phone, Loader2 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { authService } from '../../api/authService'
 import PasswordRules, { isPasswordValid } from '../../components/auth/PasswordRules'
@@ -270,10 +270,21 @@ export default function Register() {
                 disabled={loading}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded text-sm font-semibold text-white disabled:opacity-50 ${step === 3 ? 'bg-[#f15a24] hover:bg-[#d94e1d]' : 'bg-[#0070CD] hover:bg-[#005fa8]'}`}
               >
-                {loading ? 'Création...' : step === 3 ? 'Créer mon compte' : 'Continuer'}
-                {step < 3 && <ChevronRight size={16} />}
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={16} />
+                    {step === 3 ? 'Création...' : 'Validation...'}
+                  </>
+                ) : step === 3 ? 'Créer mon compte' : 'Continuer'}
+                {!loading && step < 3 && <ChevronRight size={16} />}
               </button>
             </div>
+
+            {loading && (
+              <p className="text-xs text-gray-500 text-center -mt-1">
+                Réveil du serveur en cours… la première connexion peut prendre quelques secondes.
+              </p>
+            )}
 
             {step === 1 && (
               <>
