@@ -362,16 +362,6 @@ export default function Landing() {
                     WhatsApp : +237 678 330 877
                   </a>
                 </li>
-                <li>
-                  <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors">
-                    WhatsApp : +237 678 330 877
-                  </a>
-                </li>
-                <li>
-                  <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors">
-                    Service client
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
