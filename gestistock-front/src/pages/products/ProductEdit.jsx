@@ -6,6 +6,7 @@ import { categoryService } from '../../api/categoryService'
 import { supplierService } from '../../api/supplierService'
 import toast from 'react-hot-toast'
 import { ArrowLeft, Upload } from 'lucide-react'
+import { storageUrl } from '../../utils/assets'
 
 export default function ProductEdit() {
   const { id } = useParams()
@@ -51,7 +52,7 @@ export default function ProductEdit() {
         image:        null,
       })
       if (p.image) {
-        setPreview(`http://localhost:8000/storage/${p.image}`)
+        setPreview(storageUrl(p.image))
       }
     })
   }, [id])

@@ -9,6 +9,7 @@ import { exportInventoryReportPDF } from '../../utils/pdfDocuments'
 import toast from 'react-hot-toast'
 import { Plus, Search, Edit, Trash2, AlertTriangle, XCircle, FileDown, FileSpreadsheet, ClipboardList } from 'lucide-react'
 import { exportStockExcel } from '../../utils/exportExcel'
+import { storageUrl } from '../../utils/assets'
 
 const statusConfig = {
   normal:  { label: 'Normal',  class: 'bg-green-100 text-green-700'   },
@@ -200,7 +201,7 @@ const handleExportExcel = async () => {
                     <div className="flex items-center gap-3">
                       {product.image ? (
                         <img
-                          src={`http://localhost:8000/storage/${product.image}`}
+                          src={storageUrl(product.image)}
                           className="w-10 h-10 rounded-lg object-cover"
                           alt={product.name}
                         />

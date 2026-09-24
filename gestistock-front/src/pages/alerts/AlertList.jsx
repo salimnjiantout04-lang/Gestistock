@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext'
 import { Link } from 'react-router-dom'
 import { AlertTriangle, XCircle, Edit, FileText } from 'lucide-react'
 import { purchaseOrderService } from '../../api/purchaseOrderService'
+import { storageUrl } from '../../utils/assets'
 
 export default function AlertList() {
   const { user: currentUser } = useAuth()
@@ -38,7 +39,7 @@ export default function AlertList() {
         <div className="flex items-center gap-3">
           {product.image ? (
             <img
-              src={`http://localhost:8000/storage/${product.image}`}
+              src={storageUrl(product.image)}
               className="w-9 h-9 rounded-lg object-cover"
               alt={product.name}
             />
