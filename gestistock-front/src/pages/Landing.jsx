@@ -88,7 +88,7 @@ export default function Landing() {
                 Se connecter
               </Link>
               <Link to="/register" className="group inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gray-200">
-                Essai gratuit
+                Essai gratuit 7 jours
                 <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </Link>
             </div>
@@ -106,7 +106,7 @@ export default function Landing() {
             <a href="#pricing" onClick={() => setMenuOpen(false)} className="block text-sm text-gray-600 py-2 font-medium">Tarifs</a>
             <div className="pt-2 flex gap-3">
               <Link to="/login" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-sm font-medium text-gray-700 border border-gray-200 px-4 py-2.5 rounded-full">Se connecter</Link>
-              <Link to="/register" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-sm font-medium text-white bg-blue-600 px-4 py-2.5 rounded-full">Essai gratuit</Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-sm font-medium text-white bg-blue-600 px-4 py-2.5 rounded-full">Essai gratuit 7 jours</Link>
             </div>
           </div>
         )}
@@ -131,14 +131,14 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link to="/register" className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 text-center text-white bg-blue-600 hover:bg-blue-700 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-lg shadow-gray-300/70 hover:shadow-gray-300 hover:-translate-y-0.5">
-                Commencer gratuitement
+                Commencer gratuitement (7 jours)
                 <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
               <a href="#features" className="w-full sm:w-auto text-center text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5">
                 En savoir plus
               </a>
             </div>
-            <p className="text-xs text-gray-400 mt-4">Aucune carte bancaire requise · Essai gratuit</p>
+            <p className="text-xs text-gray-400 mt-4">Aucune carte bancaire requise · Essai gratuit de 7 jours</p>
           </Reveal>
 
           <Reveal className="relative max-w-5xl mx-auto" delay={180}>
@@ -292,7 +292,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Link to="/register" className="block w-full text-center text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-all shadow-lg shadow-gray-300/70">
-                Essai gratuit
+                Essai gratuit 7 jours
               </Link>
             </Reveal>
 
@@ -325,11 +325,11 @@ export default function Landing() {
           </h2>
           <p className="text-gray-400 mb-8 max-w-xl mx-auto">
             Rejoignez les entreprises qui utilisent GestiStock au quotidien. 
-            Commencez gratuitement, aucune carte bancaire requise.
-          </p>
+Commencez gratuitement pendant 7 jours, aucune carte bancaire requise.
+            </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/register" className="w-full sm:w-auto text-center text-gray-900 bg-white hover:bg-gray-100 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5">
-              Commencer gratuitement
+              Commencer gratuitement (7 jours)
             </Link>
             <a href="https://wa.me/237678330877" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto text-center text-white border border-gray-600 hover:border-gray-500 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5">
               Contacter l'équipe
