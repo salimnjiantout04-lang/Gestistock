@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import AppLayout from '../../components/layouts/AppLayout'
+import { useAuth } from '../../context/AuthContext'
 import { dashboardService } from '../../api/dashboardService'
 import {
   Package, TrendingUp, AlertTriangle, XCircle, ArrowDownCircle, ArrowUpCircle,
-  ShoppingCart, FileText, TrendingDown
+  ShoppingCart, FileText, TrendingDown, Timer, ArrowRight
 } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
@@ -14,6 +15,7 @@ import {
 export default function Dashboard() {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
+  const { user } = useAuth()
 
   useEffect(() => {
     dashboardService.stats()
@@ -73,6 +75,29 @@ export default function Dashboard() {
         <h1 className="text-2xl font-semibold text-gray-900">Tableau de bord</h1>
         <p className="text-sm text-gray-500 mt-1">Vue d'ensemble de votre activité</p>
       </div>
+
+      {user?.trial_days_left > 0 && (
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-gradient-to-r from-blue-600 to-[#0070CD] rounded-xl px-5 py-4 mb-6">
+          <div className="bg-white/15 p-2 rounded-lg shrink-0">
+            <Timer size={20} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-white">
+              {user.trial_days_left === 1 ? 'Dernier jour d\'essai gratuit !' : `${user.trial_days_left} jours restants sur votre essai gratuit`}
+            </p>
+            <p className="text-xs text-white/80 mt-0.5">
+              Passez au plan payant à tout moment pour éviter toute interruption.
+            </p>
+          </div>
+          <Link
+            to="/upgrade"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0070CD] bg-white hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors shrink-0"
+          >
+            Passer au plan payant
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+      )}
 
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
