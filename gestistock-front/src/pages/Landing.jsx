@@ -258,25 +258,7 @@ export default function Landing() {
             <p className="text-gray-500">Pas de frais cachés, pas de surprise. Commencez gratuitement.</p>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <Reveal className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Starter</h3>
-              <p className="text-sm text-gray-500 mb-6">Pour les petites structures</p>
-              <p className="text-3xl font-bold text-gray-900 mb-1">Gratuit</p>
-              <p className="text-sm text-gray-400 mb-6">Toujours</p>
-              <ul className="space-y-3 mb-8">
-                {['Jusqu\'à 50 produits', 'Mouvements de stock', 'Tableau de bord', '1 entrepôt', 'Support email'].map((item, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                    <CheckCircle size={16} className="text-blue-500 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/register" className="block w-full text-center text-sm font-semibold text-blue-600 bg-white hover:bg-gray-50 border border-gray-200 px-6 py-3 rounded-full transition-colors">
-                Commencer
-              </Link>
-            </Reveal>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <Reveal className="rounded-2xl border-2 border-blue-500 p-8 bg-white shadow-xl shadow-gray-200/80 relative scale-105 hover:-translate-y-1 transition-transform duration-300" delay={120}>
               <span className="landing-popular-badge absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-semibold px-4 py-1 rounded-full">Populaire</span>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Pro</h3>
@@ -296,7 +278,7 @@ export default function Landing() {
               </Link>
             </Reveal>
 
-            <Reveal className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300" delay={240}>
+            <Reveal className="rounded-2xl border border-gray-100 p-8 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300" delay={180}>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Enterprise</h3>
               <p className="text-sm text-gray-500 mb-6">Pour les grandes structures</p>
               <p className="text-3xl font-bold text-gray-900 mb-1">Sur mesure</p>
