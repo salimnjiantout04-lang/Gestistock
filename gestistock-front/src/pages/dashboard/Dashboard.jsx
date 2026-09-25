@@ -77,7 +77,7 @@ export default function Dashboard() {
       </div>
 
       {user?.trial_days_left > 0 && (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-gradient-to-r from-blue-600 to-[#0070CD] rounded-xl px-5 py-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-[#0070CD] rounded-xl px-5 py-4 mb-6">
           <div className="bg-white/15 p-2 rounded-lg shrink-0">
             <Timer size={20} className="text-white" />
           </div>
