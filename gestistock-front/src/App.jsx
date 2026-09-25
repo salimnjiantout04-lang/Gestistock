@@ -47,7 +47,7 @@ export default function App() {
             <Route path="/auth/google-callback" element={<GoogleCallback />} />
             <Route path="/upgrade" element={<Upgrade />} />
             <Route path="/" element={<Landing />} />
-            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/dashboard" element={<PrivateRoute><ErrorBoundary><Dashboard /></ErrorBoundary></PrivateRoute>} />
             <Route path="/products" element={<PrivateRoute><ProductList /></PrivateRoute>} />
             <Route path="/products/create" element={<PrivateRoute roles={['admin', 'gestionnaire']}><ProductCreate /></PrivateRoute>} />
             <Route path="/products/:id/edit" element={<PrivateRoute roles={['admin', 'gestionnaire']}><ProductEdit /></PrivateRoute>} />
