@@ -10,6 +10,22 @@ export default class ErrorBoundary extends Component {
     return { error }
   }
 
+  componentDidMount() {
+    window.addEventListener('error', this.handleGlobal)
+    window.addEventListener('unhandledrejection', this.handleGlobal)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('error', this.handleGlobal)
+    window.removeEventListener('unhandledrejection', this.handleGlobal)
+  }
+
+  handleGlobal = (e) => {
+    const message = e?.reason?.message || e?.message || String(e || 'Erreur inconnue')
+    if (message === 'ResizeObserver loop limit exceeded') return
+    this.setState({ error: new Error(message) })
+  }
+
   render() {
     if (this.state.error) {
       return (

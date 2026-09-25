@@ -37,17 +37,18 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Toaster position="top-right" />
-          <Routes>
-            <Route path="/login"              element={<Login />} />
-            <Route path="/register"           element={<ErrorBoundary><Register /></ErrorBoundary>} />
-            <Route path="/forgot-password"    element={<ForgotPassword />} />
-            <Route path="/reset-password"     element={<ResetPassword />} />
-            <Route path="/auth/google-callback" element={<GoogleCallback />} />
-            <Route path="/upgrade" element={<Upgrade />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="/dashboard" element={<PrivateRoute><ErrorBoundary><Dashboard /></ErrorBoundary></PrivateRoute>} />
+        <ErrorBoundary>
+          <BrowserRouter>
+            <Toaster position="top-right" />
+            <Routes>
+              <Route path="/login"              element={<Login />} />
+              <Route path="/register"           element={<Register />} />
+              <Route path="/forgot-password"    element={<ForgotPassword />} />
+              <Route path="/reset-password"     element={<ResetPassword />} />
+              <Route path="/auth/google-callback" element={<GoogleCallback />} />
+              <Route path="/upgrade" element={<Upgrade />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/products" element={<PrivateRoute><ProductList /></PrivateRoute>} />
             <Route path="/products/create" element={<PrivateRoute roles={['admin', 'gestionnaire']}><ProductCreate /></PrivateRoute>} />
             <Route path="/products/:id/edit" element={<PrivateRoute roles={['admin', 'gestionnaire']}><ProductEdit /></PrivateRoute>} />
@@ -71,8 +72,9 @@ export default function App() {
             <Route path="/sales/:id/edit" element={<PrivateRoute roles={['admin', 'gestionnaire']}><OrderForm /></PrivateRoute>} />
             <Route path="/users" element={<PrivateRoute roles={['admin']}><UserList /></PrivateRoute>} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </BrowserRouter>
+            </Routes>
+          </BrowserRouter>
+        </ErrorBoundary>
       </AuthProvider>
     </ThemeProvider>
   )
