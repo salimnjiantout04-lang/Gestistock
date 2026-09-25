@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
-import { Package, CheckCircle, MessageCircle, Lock } from 'lucide-react'
+import { Package, CheckCircle, MessageCircle, Lock, Timer } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 export default function Upgrade() {
+  const { user } = useAuth()
+  const expired = user?.trial_expired ?? false
+  const daysLeft = user?.trial_days_left ?? 0
+
   return (
     <div className="relative min-h-screen bg-white flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top_right,rgba(15,23,42,0.035),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(148,163,184,0.04),transparent_50%)]">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-lg overflow-hidden">
@@ -10,18 +15,35 @@ export default function Upgrade() {
             <Lock className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-white font-semibold text-lg">Essai gratuit terminé</h1>
-            <p className="text-white/70 text-xs">Passez au plan payant pour continuer</p>
+            <h1 className="text-white font-semibold text-lg">{expired ? 'Essai gratuit terminé' : 'Passez au plan payant'}</h1>
+            <p className="text-white/70 text-xs">
+              {expired ? 'Choisissez un plan pour continuer' : 'Gardez vos fonctionnalités sans interruption'}
+            </p>
           </div>
         </div>
 
         <div className="px-6 py-6">
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 mb-5">
-            <p className="text-sm text-amber-800">
-              Votre essai gratuit de <strong>7 jours</strong> est expiré. Pour continuer à utiliser
-              GestiStock, choisissez un plan payant ci-dessous.
-            </p>
-          </div>
+          {expired ? (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 mb-5">
+              <p className="text-sm text-amber-800">
+                Votre essai gratuit de <strong>7 jours</strong> est terminé. Pour continuer à utiliser
+                GestiStock, choisissez un plan payant ci-dessous.
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 mb-5">
+              <p className="text-sm text-blue-800 flex items-center gap-2">
+                <Timer size={16} className="shrink-0" />
+                {daysLeft === 1
+                  ? 'Il vous reste 1 jour d\'essai gratuit.'
+                  : `Il vous reste encore ${daysLeft} jours d'essai gratuit.`}
+              </p>
+              <p className="text-xs text-blue-700 mt-1">
+                Votre compte continue de fonctionner normalement pendant votre essai. Passez au plan payant
+                maintenant ou plus tard, quand vous serez prêt.
+              </p>
+            </div>
+          )}
 
           <div className="border border-[#0070CD]/20 rounded-xl overflow-hidden mb-5">
             <div className="bg-[#0070CD] px-5 py-3 flex items-center justify-between">
@@ -62,9 +84,15 @@ export default function Upgrade() {
           </p>
 
           <div className="flex items-center justify-between text-xs pt-5">
-            <Link to="/login" className="text-[#0070CD] hover:underline font-medium">
-              Revenir à la connexion
-            </Link>
+            {expired ? (
+              <Link to="/login" className="text-[#0070CD] hover:underline font-medium">
+                Revenir à la connexion
+              </Link>
+            ) : (
+              <Link to="/dashboard" className="text-[#0070CD] hover:underline font-medium">
+                Retour au tableau de bord
+              </Link>
+            )}
             <Link to="/" className="text-gray-500 hover:underline">
               Accueil
             </Link>
