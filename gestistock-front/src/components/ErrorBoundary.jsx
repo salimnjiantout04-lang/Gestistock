@@ -10,6 +10,27 @@ export default class ErrorBoundary extends Component {
     return { error }
   }
 
+  componentDidCatch(error) {
+    const message = error?.message || ''
+    const isDomConflict =
+      message.includes('removeChild') ||
+      message.includes('NotFoundError') ||
+      message.includes("the node to be removed is not a child")
+
+    if (isDomConflict) {
+      const key = 'gestistock_autoreload'
+      const count = parseInt(sessionStorage.getItem(key) || '0', 10)
+      if (count < 2) {
+        sessionStorage.setItem(key, String(count + 1))
+        window.location.reload()
+      } else {
+        sessionStorage.removeItem(key)
+      }
+    } else {
+      console.error('Erreur de rendu:', error)
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('error', this.handleGlobal)
     window.addEventListener('unhandledrejection', this.handleGlobal)
