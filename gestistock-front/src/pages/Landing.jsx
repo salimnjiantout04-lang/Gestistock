@@ -35,9 +35,12 @@ function Reveal({ as: Component = 'div', children, className = '', delay = 0 }) 
     const node = ref.current
     if (!node) return
 
+    let disposed = false
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (disposed) return
+        if (entry.isIntersecting && node.isConnected) {
           setIsVisible(true)
           observer.unobserve(entry.target)
         }
@@ -47,7 +50,10 @@ function Reveal({ as: Component = 'div', children, className = '', delay = 0 }) 
 
     observer.observe(node)
 
-    return () => observer.disconnect()
+    return () => {
+      disposed = true
+      observer.disconnect()
+    }
   }, [])
 
   return (
