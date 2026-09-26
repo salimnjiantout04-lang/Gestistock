@@ -22,8 +22,8 @@ export default class ErrorBoundary extends Component {
 
   handleGlobal = (e) => {
     const message = e?.reason?.message || e?.message || String(e || 'Erreur inconnue')
-    if (message === 'ResizeObserver loop limit exceeded') return
-    this.setState({ error: new Error(message) })
+    if (message.includes('removeChild')) return
+    console.error('Erreur globale (non bloquante):', e)
   }
 
   render() {
