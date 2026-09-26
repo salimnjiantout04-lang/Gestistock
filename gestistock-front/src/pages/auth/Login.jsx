@@ -25,8 +25,7 @@ export default function Login() {
   const onSubmit = async (data) => {
     try {
       await login(data.email, data.password)
-      toast.success('Connexion réussie !')
-      navigate('/dashboard')
+      requestAnimationFrame(() => navigate('/dashboard'))
     } catch (err) {
       if (err.response?.data?.trial_expired) {
         navigate('/upgrade')

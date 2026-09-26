@@ -37,7 +37,7 @@ export default function GoogleCallback() {
     authService.exchangeGoogleCode(code)
       .then((res) => {
         setSession(res.data.user, res.data.token)
-        navigate('/dashboard', { replace: true })
+        requestAnimationFrame(() => navigate('/dashboard', { replace: true }))
       })
       .catch((err) => {
         const message = err.response?.data?.errors?.code?.[0]

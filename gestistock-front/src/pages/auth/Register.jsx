@@ -91,7 +91,7 @@ export default function Register() {
       })
       setSession(res.data.user, res.data.token)
       toast.success('Bienvenue ! Votre compte a été créé.')
-      navigate('/dashboard', { replace: true })
+      requestAnimationFrame(() => navigate('/dashboard', { replace: true }))
     } catch (err) {
       const apiErrors = err.response?.data?.errors
       if (apiErrors) {

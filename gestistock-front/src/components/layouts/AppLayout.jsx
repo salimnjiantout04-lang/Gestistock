@@ -73,9 +73,9 @@ export default function AppLayout({ children }) {
   const filteredNav = navItems.filter(item => item.roles.includes(currentUser?.role))
 
   const handleLogout = async () => {
-    navigate('/')
     await logout()
     toast.success('Déconnecté avec succès')
+    requestAnimationFrame(() => navigate('/'))
   }
 
   const ThemeToggle = ({ className = '' }) => (
