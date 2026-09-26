@@ -14,6 +14,17 @@ export default function Login() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm()
   const [showPassword, setShowPassword] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
+  const [slowRequest, setSlowRequest] = useState(false)
+
+  useEffect(() => {
+    let timer
+    if (isSubmitting) {
+      timer = setTimeout(() => setSlowRequest(true), 4000)
+    } else {
+      setSlowRequest(false)
+    }
+    return () => clearTimeout(timer)
+  }, [isSubmitting])
 
   useEffect(() => {
     const error = searchParams.get('error')
@@ -111,7 +122,7 @@ export default function Login() {
               )}
             </button>
 
-            {isSubmitting && (
+            {slowRequest && (
               <p className="flex items-center justify-center gap-1.5 text-xs text-gray-500 pt-1">
                 <Loader2 className="animate-spin" size={12} />
                 Réveil du serveur en cours… première connexion, patientez quelques secondes

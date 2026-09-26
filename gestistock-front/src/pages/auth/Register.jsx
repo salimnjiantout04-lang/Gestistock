@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { Package, Mail, Lock, Eye, EyeOff, ChevronRight, ChevronLeft, User, Phone, Loader2 } from 'lucide-react'
@@ -34,6 +34,17 @@ export default function Register() {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
+  const [slowRequest, setSlowRequest] = useState(false)
+
+  useEffect(() => {
+    let timer
+    if (loading) {
+      timer = setTimeout(() => setSlowRequest(true), 4000)
+    } else {
+      setSlowRequest(false)
+    }
+    return () => clearTimeout(timer)
+  }, [loading])
 
   const update = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -280,7 +291,7 @@ export default function Register() {
               </button>
             </div>
 
-            {loading && (
+            {slowRequest && (
               <p className="text-xs text-gray-500 text-center -mt-1">
                 Réveil du serveur en cours… la première connexion peut prendre quelques secondes.
               </p>
