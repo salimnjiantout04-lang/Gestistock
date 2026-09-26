@@ -33,6 +33,16 @@ export default function AppLayout({ children }) {
   const [alerts, setAlerts] = useState({ total: 0 })
 
   useEffect(() => {
+    const root = document.documentElement
+    if (isDarkMode) {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+    return () => root.classList.remove('dark')
+  }, [isDarkMode])
+
+  useEffect(() => {
     const fetchAlerts = async () => {
       try {
         const res = await dashboardService.alerts()
